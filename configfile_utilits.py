@@ -1,6 +1,6 @@
-telegramtoken = "TG TOKEN"
-gmail_sender = "GMAIL LOGIN"
-gmail_password = "GMAIL PASSWORD"
+telegramtoken = "TELEGRAM BOT TOKEN"
+gmail_sender = "GMAIL ACCOUNT LOGIN"
+gmail_password = "GMAIL 3RD APPLICATION PASSWORD"
 telegramwhitelist = {
     10000001: "user@gmail.com",  # telegram_user_id : "user email"
 }
