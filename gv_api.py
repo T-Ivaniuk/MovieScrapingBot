@@ -16,7 +16,8 @@ headers = {
     "authority": "www.gv.com.sg"}
 
 cinema_data = []
-column_names = ["Cinema", "Movie", "Day", "Time", "Number of seats", "Sold", "Available", "WB_available", "Sold %"]
+cinema_column_names = ["Cinema", "Movie", "Day", "Time", "Number of seats",
+                       "Sold", "Available", "WB_available", "Sold %"]
 
 
 def random_n():
@@ -38,20 +39,17 @@ def save_sheet(dataframe, sheet_name, filename):
 
 
 def validate_sheet_name(string: str) -> str:
+    """sheet name validation for excel file with filter match and symbol length"""
     available = " 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     name = "".join(filter(lambda x: x in available, string))[:30]
     if len(name) > 0:
         return name
     else:
-        return "validate_sheet_name fail"
-
-
-def convert_human_time(i_time):
-    s = datetime.datetime.strptime(i_time, "%H:%M%p")
-    return s.strftime("%H%M")
+        return f"sheet {random_n()}"
 
 
 async def get_showtime_data(cinemaid, filmcode, showdate, showtime, hallnumber, session):
+    """get data of sold and available seats for specific movie session"""
     payload = {"cinemaId": cinemaid, "filmCode": filmcode, "showDate": showdate,
                "showTime": showtime, "hallNumber": hallnumber}
     response = await session.post(url=f"https://www.gv.com.sg/.gv-api/seatplan?t={random_n()}_{timestamp_now()}",
@@ -61,6 +59,7 @@ async def get_showtime_data(cinemaid, filmcode, showdate, showtime, hallnumber, 
 
 
 async def get_count_of_seats(response):
+    """data manipulation for count of available and sold seats"""
     data = {"Sold": 0, "%": 0, "Available": 0, "WB_available": 0}
     for row in response["data"]:
         for column in row:
@@ -78,25 +77,8 @@ async def get_count_of_seats(response):
     return data
 
 
-async def get_dbox_count_of_seats(response):
-    data = {"Sold": 0, "%": 0, "Available": 0, "WB_available": 0}
-    for row in response["data"][-2:]:
-        for column in row:
-            if column["status"] == "B":
-                data["Sold"] += 1
-            if column["status"] == "L":
-                data["Available"] += 1
-            if column["status"] == "W":
-                data["Available"] += 1
-                data["WB_available"] += 1
-    seats_count = data['Sold'] + data['Available']
-    pers_v = round(data['Sold'] / seats_count, 5) * 100
-    data['Sold %'] = " " + "{:.1f}".format(pers_v)
-    data["Number of seats"] = seats_count
-    return data
-
-
 async def parse_movie(cinema_name, cinema_code, movie, session):
+    """parse specific movie in each cinema"""
     try:
         movies_data = []
         film_title = movie["filmTitle"]
@@ -107,10 +89,7 @@ async def parse_movie(cinema_name, cinema_code, movie, session):
             showdate = showtime['showDate']
             response = await get_showtime_data(cinemaid=cinema_code, filmcode=film_code, showdate=showdate,
                                                showtime=human_time, hallnumber=hall, session=session)
-            if cinema_name == "D-BOX, Bishan ":
-                seats_dict = await get_dbox_count_of_seats(response)
-            else:
-                seats_dict = await get_count_of_seats(response)
+            seats_dict = await get_count_of_seats(response)
             seats_dict["Movie"] = film_title
             seats_dict["Day"] = showdate
             seats_dict["Time"] = human_time
@@ -120,7 +99,8 @@ async def parse_movie(cinema_name, cinema_code, movie, session):
         return movies_data
     except Exception as E:
         print(E)
-        print("parse_movie ERROR")
+    finally:
+        return []
 
 
 class GoldenVillage:
@@ -136,6 +116,7 @@ class GoldenVillage:
         self.fully_fixed_cinema_data = None
 
     def get_specific_timestamp(self):
+        """function to convert specific day in timestamp format"""
         datetime_now = datetime.datetime.now(datetime.timezone.utc)
         self.day_in_timestamp = int((datetime.datetime(datetime_now.year, datetime_now.month, datetime_now.day, 00, 00)
                                      + datetime.timedelta(days=self.day)).timestamp()) * 1000
@@ -153,6 +134,7 @@ class GoldenVillage:
         self.movies_list = response["data"]["cinemas"]
 
     def prepare_cinema_list(self):
+        """function of adding films for each of the cinemas"""
         self.get_movies_list()
         self.get_cinema_list()
         result_d = {}
@@ -172,6 +154,7 @@ class GoldenVillage:
             del self.preparired_cinema_list[key]
 
     def fix_midnight_datetime(self):
+        """function which allows to fix midnight session datetime issue"""
         for cinema in self.preparired_cinema_list:
             for movie in self.preparired_cinema_list[cinema]["movies"]:
                 for time_data in movie["times"]:
@@ -196,6 +179,7 @@ async def get_cinema(cinema, session):
 
 
 async def get_movie_session_data(day):
+    """a global function that initializes movie scraping on a specific day"""
     gv_cinema = GoldenVillage(day=day)
     gv_cinema.prepare_cinema_list()
     gv_cinema.delete_cinema_without_movies()
@@ -210,17 +194,11 @@ async def get_movie_session_data(day):
 
 
 def gv_parser(day, filename):
-    print("parse func loaded")
-    start_time = time.time()
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     asyncio.new_event_loop().run_until_complete(get_movie_session_data(day))
     for each_cinema in cinema_data:
         each_cinema_name = each_cinema[0]
         each_cinema_data = each_cinema[1]
-        each_cinema_dataframe = pd.DataFrame(data=each_cinema_data, columns=column_names)
+        each_cinema_dataframe = pd.DataFrame(data=each_cinema_data, columns=cinema_column_names)
         save_sheet(dataframe=each_cinema_dataframe, sheet_name=validate_sheet_name(each_cinema_name), filename=filename)
-    print(time.time() - start_time)
     return filename
-
-
-

@@ -59,8 +59,6 @@ class Projector:
             movie_screen_id = movie["ScreenId"]
             movie['Cinema'] = self.get_cinema_name_by_screen_id(movie_screen_id)
 
-
-
     def parse_data(self):
         total_movie_data = []
         for movie in self.movies:
@@ -75,10 +73,8 @@ class Projector:
                 movie_total_seats_count = movie_seats_sold + movie_seats_held + movie_seats_house + movie_seats_available
                 pers_v = round(movie_seats_sold / movie_total_seats_count, 5) * 100
                 formatted_pers_v = " " + "{:.1f}".format(pers_v)
-                total_movie_data.append(
-                    [cinema_name, movie_title, movie_time, movie_seats_sold, movie_seats_held, movie_seats_house,
-                     movie_seats_available,
-                     formatted_pers_v])
+                total_movie_data.append([cinema_name, movie_title, movie_time, movie_seats_sold,
+                                         movie_seats_held, movie_seats_house, movie_seats_available, formatted_pers_v])
         self.parsed_movie_data = total_movie_data
 
     def day_filter_hit(self, time_to_check):
@@ -88,7 +84,8 @@ class Projector:
 
     def create_dataframe(self):
         column_names = ["Cinema name", "Movie name", "Start time", "Sold", "Held", "Seats house", "Available", "Sold %"]
-        self.parsed_data_frame = pd.DataFrame(data=self.parsed_movie_data, columns=column_names).sort_values(by=['Start time'])
+        self.parsed_data_frame = pd.DataFrame(data=self.parsed_movie_data,
+                                              columns=column_names).sort_values(by=['Start time'])
 
     def save_to_file(self):
         if os.path.isfile(self.filename):
@@ -101,7 +98,6 @@ class Projector:
 
 
 def theprojector_parser(filename: str, day: int):
-    print("theprojector_parser loaded")
     projector = Projector(filename=filename, day=day)
     projector.get_theprojector_cinemas()
     projector.get_theprojector_movies()
@@ -110,4 +106,3 @@ def theprojector_parser(filename: str, day: int):
     projector.create_dataframe()
     projector.save_to_file()
     return filename
-
