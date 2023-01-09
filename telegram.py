@@ -194,6 +194,12 @@ def send_email(file_to_send: str, receiver: list, filename: str):
         return f"mail send error: \n{E}"
 
 
+@bot.message_handler(chat_id=telegramwhitelist, commands=['start', 'help'])
+def send_welcome(message):
+    """just test button (whitelist required)"""
+    bot.reply_to(message, "Howdy, how are you doing?", reply_markup=main_markup())
+
+
 @bot.message_handler(chat_id=telegramwhitelist, func=lambda message: message.text == "Test")
 def send_welcome(message):
     """just test button (whitelist required)"""
