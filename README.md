@@ -8,12 +8,33 @@ It was designed as a simple, lightweight data collection library with the abilit
 
 [Obtaining Gmail 3rd party password]( https://www.youtube.com/watch?v=IWxwWFTlTUQ )
 
-Installation
+## Deploy Locally
 ============
 
+
+- Clone the repo. 
 ```
 git clone https://github.com/T-Ivaniuk/MovieScrapingBot.git
 ```
+
+- Open Cloned Folder.
+`cd MovieScrapingBot`
+
+- Create VirtualEnv.
+`python -m venv venv`
+
+- Activate virtualenv
+`.\venv\Scripts\activate`
+
+- Install Requirements.
+`pip install -r requirements.txt`
+
+- Fill configfile_utilits.py file. Fill All The Required Variables.
+
+- Start MovieScrapingBot By
+`python telegram.py`
+
+
 
 Usage
 =======
