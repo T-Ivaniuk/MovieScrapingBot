@@ -9,13 +9,9 @@ It was designed as a simple, lightweight data collection library with the abilit
 [Obtaining Gmail 3rd party password]( https://www.youtube.com/watch?v=IWxwWFTlTUQ )
 
 ## Deploy Locally
-============
-
 
 - Clone the repo. 
-```
-git clone https://github.com/T-Ivaniuk/MovieScrapingBot.git
-```
+`git clone https://github.com/T-Ivaniuk/MovieScrapingBot.git`
 
 - Open Cloned Folder
 `cd MovieScrapingBot`
