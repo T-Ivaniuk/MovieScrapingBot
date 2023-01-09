@@ -14,7 +14,7 @@ import time
 
 files_dir = folder_for_tg
 cinema_types = ["[TP]", "[GV]"]
-bot = TeleBot(telegramtoken)  # parse_mode=None #
+bot = TeleBot(telegramtoken)
 bot.add_custom_filter(custom_filters.ChatFilter())
 
 
@@ -29,8 +29,7 @@ def human_time_now_up_to_minute():
     return date_time.strftime("%Y-%m-%d_%H-%M")
 
 
-def day(number):
-    """formatted date in specific day"""
+def day(number: int) -> str:
     return (datetime.date.today() + datetime.timedelta(days=number)).strftime("%a, %d %b %Y")
 
 
@@ -47,7 +46,7 @@ def validate(string):
 
 
 def day_diff(d2):
-    """difference between to dates (up to day)"""
+    """difference between two dates (up to day)"""
     d1 = datetime.date.today().day
     d2 = datetime.datetime.strptime(d2, "%a, %d %b %Y").day
 
@@ -55,18 +54,18 @@ def day_diff(d2):
 
 
 def create_folder():
-    """little func to create folder for files if not exist"""
+    """function to create folder if it doesn't exist"""
     if not os.path.exists(files_dir):
         os.makedirs(files_dir)
 
 
 def bot_started_alert():
-    """send message to all whitelist tg users - bot alive"""
+    """send message to all tg users in whitelist """
     print("telegram bot started")
     for key in telegramwhitelist.keys():
         try:
             print(key, telegramwhitelist[key])
-            bot.send_message(key, f"GVBot started \nyour mail: {telegramwhitelist[key]}", reply_markup=main_markup())
+            bot.send_message(key, f"MovieBot started \nyour mail: {telegramwhitelist[key]}", reply_markup=main_markup())
         except:
             pass
 
