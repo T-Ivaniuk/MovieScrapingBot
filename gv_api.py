@@ -179,7 +179,6 @@ async def get_cinema(cinema, session):
 
 
 async def get_movie_session_data(day):
-    """a global function that initializes movie scraping on a specific day"""
     gv_cinema = GoldenVillage(day=day)
     gv_cinema.prepare_cinema_list()
     gv_cinema.delete_cinema_without_movies()

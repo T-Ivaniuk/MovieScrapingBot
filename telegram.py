@@ -1,9 +1,7 @@
 from configfile_utilits import *
 from gv_api import gv_parser
 from tp_api import theprojector_parser
-from telebot import types
-from telebot import TeleBot
-from telebot import custom_filters
+from telebot import types, TeleBot, custom_filters
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
@@ -64,6 +62,7 @@ def create_folder():
 
 def bot_started_alert():
     """send message to all whitelist tg users - bot alive"""
+    print("telegram bot started")
     for key in telegramwhitelist.keys():
         try:
             print(key, telegramwhitelist[key])
@@ -74,7 +73,7 @@ def bot_started_alert():
 
 def main_markup():
     """
-    main menu telegeram keyboard
+    keyboard for telegeram main menu
     :return: markup
     """
     markup = types.ReplyKeyboardMarkup()
@@ -255,7 +254,5 @@ def infitiy_polling():
 
 
 bot_started_alert()
-print("telegram bot started")
 bot.set_update_listener(listener)
-
 infitiy_polling()
