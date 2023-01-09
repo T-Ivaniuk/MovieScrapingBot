@@ -17,30 +17,29 @@ It was designed as a simple, lightweight data collection library with the abilit
 git clone https://github.com/T-Ivaniuk/MovieScrapingBot.git
 ```
 
-- Open Cloned Folder.
+- Open Cloned Folder
 `cd MovieScrapingBot`
 
-- Create VirtualEnv.
+- Create VirtualEnv
 `python -m venv venv`
 
 - Activate virtualenv
 `.\venv\Scripts\activate`
 
-- Install Requirements.
+- Install Requirements
 `pip install -r requirements.txt`
 
-- Fill configfile_utilits.py file. Fill All The Required Variables.
+- Fill configfile_utilits.py file
 
 - Start MovieScrapingBot By
 `python telegram.py`
-
 
 
 Usage
 =======
 
 
-If you have `Gmail account with 3rd party API usage permission`, `telegram bot token`, which are minimum of requirements to start telegram bot,
+If you have `Gmail account with 3rd party API usage permission`, `telegram bot token`, which are minimum of requirement variables to start telegram bot,
 you can replace suggested values in `configfile_utilits.py`
 ```python
 telegramtoken = "TELEGRAM BOT TOKEN"
