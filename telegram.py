@@ -1,6 +1,6 @@
 from configfile_utilits import *
-from gv_api import gv_parser
-from tp_api import theprojector_parser
+from GoldenVillageAPI import gv_parser
+from TheProjectorAPI import TheProjector
 from telebot import types, TeleBot, custom_filters
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
@@ -240,7 +240,8 @@ def scraping_func(message):
     bot.send_message(message.chat.id, message.text)
     filename = f"{message.text[1:3].lower()}-{human_time_now_up_to_minute()}.xlsx"
     if message.text[:4] == "[TP]":
-        file_to_send = theprojector_parser(filename=files_dir + filename, day=day_diff(message.text[5:]))
+        theprojector = TheProjector(filename=files_dir + filename, day=day_diff(message.text[5:]))
+        file_to_send = theprojector.parse_to_file()
     elif message.text[:4] == "[GV]":
         file_to_send = gv_parser(filename=files_dir + filename, day=day_diff(message.text[5:]))
 
