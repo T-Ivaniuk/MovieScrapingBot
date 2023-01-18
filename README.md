@@ -1,6 +1,6 @@
 # MovieScrapingBot
 
-`MovieScrapingBot` is a telegram bot, which allows you to scrape count of sold seats for theprojector.sg and gv.com.sg websites on specific day, create and recive report via Telegram and email.
+`MovieScrapingBot` is a telegram bot, which allows you to scrape count of sold seats for theprojector.sg and gv.com.sg websites on specific day, create and recive reports via Telegram and email.
 
 
 [Obtaining Telegram bot token]( https://core.telegram.org/bots#how-do-i-create-a-bot )
