@@ -1,7 +1,6 @@
 # MovieScrapingBot
 
-`MovieScrapingBot` is a library for Python, which provide API to scrape count of sold seats for theprojector.sg and gv.com.sg websites.
-It was designed as a simple, lightweight data collection library with the ability to control via telegram chat.
+`MovieScrapingBot` is a telegram bot for Python, which provide API to scrape count of sold seats for theprojector.sg and gv.com.sg websites.
 
 
 [Obtaining Telegram bot token]( https://core.telegram.org/bots#how-do-i-create-a-bot )
